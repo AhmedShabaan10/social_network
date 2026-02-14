@@ -12,6 +12,24 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    /**
+     * @group Authentication
+     *
+     *@bodyParam email string required Example: test@example.com
+     *@bodyParam password string required Example: password
+     *
+     * @response 200 {
+     *   "status": true,
+     *   "message": "Logged in successfully",
+     *   "token": "1|Vkjsdf8sdf7.."
+     * }
+     *
+     * @response 401 {
+     *   "status": false,
+     *   "message": "Invalid credentials"
+     * }
+     */
+
     public function register(RegesterRequest $request)
     {
 

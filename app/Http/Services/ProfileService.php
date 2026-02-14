@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Serveices;
+namespace App\Http\Services;
 
-use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProfileService
 {
@@ -16,30 +17,20 @@ class ProfileService
         $user = auth()->user();
 
         $data = $request->only('name', 'email', 'bio');
-
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->storeAs('public/profile_images', $imageName);
-
-            $data['image'] = 'storage/profile_images/' . $imageName;
+            $image->storeAs('profile_images', $imageName, 'public');
+            $data['image'] = "storage/profile_images/{$imageName}";
+            if ($user->image) {
+                $oldImagePath = str_replace('storage/profile_images/', '', $user->image);
+                Storage::disk('public')->delete('profile_images/' . $oldImagePath);
+            }
         }
-
         $user->update($data);
 
         return $user;
     }
 
-    public function viewOthers($userId)
-    {
-        $user = User::find($userId);
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => 'User not found'
-            ], 404);
-        }
-        return $user;
-    }
 }
 ;

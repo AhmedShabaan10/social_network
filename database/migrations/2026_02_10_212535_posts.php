@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->string('image')->nullable();
             $table->integer('likes_count')->default(0);
+            $table->integer('comments_count')->default(0);
             $table->timestamps();
         });
     }

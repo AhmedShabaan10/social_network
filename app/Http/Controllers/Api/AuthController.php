@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function regester(RegesterRequest $request)
+    public function register(RegesterRequest $request)
     {
 
         $user = User::create([

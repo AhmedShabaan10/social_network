@@ -12,6 +12,7 @@ class Post extends Model
         'content',
         'image',
         'likes_count',
+        'comments_count'
     ];
 
     public function user()

@@ -44,7 +44,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -68,4 +67,29 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')->withPivot('status');
     }
+
+    public function friendsSent()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+            ->withPivot('status')
+            ->wherePivot('status', 'accepted');
+    }
+
+    public function friendsReceived()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
+            ->withPivot('status')
+            ->wherePivot('status', 'accepted');
+    }
+
+    public function isFriend($user)
+    {
+        return Friend::where(function ($q) use ($user) {
+            $q->where('user_id', auth()->id())->where('friend_id', $user->id);
+        })->orWhere(function ($q) use ($user) {
+            $q->where('user_id', $user->id)->where('friend_id', auth()->id());
+        })->where('status', 'accepted')
+            ->exists();    }
+
+
 }

@@ -106,4 +106,18 @@ class FriendsService
         return $friendship;
     }
 
+    public function myRequests()
+    {
+        $user = Auth::user();
+
+        $requests = Friend::where('friend_id', Auth::id())
+            ->where('status', Friend::STATUS_PENDING)
+            ->with('user')
+            ->get();
+        return $requests->map(function ($pivotUser) {
+            return $pivotUser;
+        });
+    }
+
+
 }

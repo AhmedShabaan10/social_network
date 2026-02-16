@@ -138,3 +138,8 @@
         </div>
     </div>
 </nav>
+<script>
+    @auth
+        listenForFriendRequests({{ auth()->id() }});
+    @endauth
+</script>F

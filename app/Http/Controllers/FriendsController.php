@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FriendRequestSent;
 use App\Http\Services\FriendsService;
 use App\Models\Friend;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FriendsController extends Controller
 {
@@ -47,7 +49,7 @@ class FriendsController extends Controller
         if ($result instanceof Friend) {
             return response()->json(['status' => 'ok']);
         }
-
+        event(new FriendRequestSent(Auth::user()->id, $id));
         return response()->json(['message' => 'Request failed'], 400);
     }
 
